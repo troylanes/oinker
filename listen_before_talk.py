@@ -44,8 +44,8 @@ while time.time() < sample_until: #sample for 15 seconds
   if l:
     # Return the maximum of the absolute value of all samples in a fragment.
     val = audioop.max(data, 2)
-    if val != 0x7FFF:
-      print "I HEARD SOMETHING!"
+    if val > 500:
+      print "I HEARD SOMETHING! %d" % val
       sys.exit(-1)
     time.sleep(0.001)
 
