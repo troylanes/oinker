@@ -8,12 +8,13 @@ use Email::MIME;
 $| = 1;
 
 #daemon config -- you need to update these variables to suit your needs
-my $base64_password = "cGFzc3dvcmQ="; #by no means is this secure!!
-my $email_server_address = "127.0.0.1"; #e.g. gmail.com, af7hg.com, etc
+my $base64_password = "cGFzc3dvcmQ="; #by no means is this secure!! -- base64 encode your password
+my $email_server_address = "gmail.com"; #e.g. gmail.com, af7hg.com, etc
 my $folder = "INBOX"; #folder on your IMAP server
 my $check_for_messages_every_x_seconds = 30; #something sensible but practical
-my $ham_speak_script = "/home/user/bin/oink.sh"; #where you put the shell script
+my $ham_speak_script = "/home/troy/projects/oinker/oink.sh"; #where you put the shell script
 my $logfile = "/tmp/oinker.log";
+my $username = "relay";
 
 #create a hash of from addresses to call signs
 #NOTE the phonetic spelling and ellipses -- adds pause and clarity to the text2speech
@@ -22,9 +23,9 @@ my $logfile = "/tmp/oinker.log";
 #ALSO there needs to be a listen before transmit mechanism.  Please use best engineering
 #practices and be courteous as always.
 
-my %call_sign_hash = (
-    '4065557716@vtext.com' => "... alpha... fox trot... seven... hotel... golf...", #example verizon
-    '4065558181@txt.att.net' => "... kilo... golf.. seven... echo... alpha... uniform..." #example att
+our %call_sign_hash = (
+    '4065551234@vzwpix.com' => "... alpha... fox trot... seven... hotel... golf...", #example verizon
+    '4065556789@txt.att.net' => "... kilo... golf.. seven...kilo ... charlie... victor...", #example att
 );
 
 # housekeeping
@@ -49,7 +50,7 @@ while(1){
   my $server = new Net::IMAP::Simple($email_server_address, use_ssl=>1) or die "$! -- " . $Net::IMAP::Simple::errstr . "\n";
   
   #login
-  if($server->login( "relay" , $password )){
+  if($server->login( $username , $password )){
 
     #check for messages
     my $messages = $server->select( $folder );
