@@ -1,4 +1,4 @@
-#/bin/bash
+#/usr/bin/env bash
 
 curr_time=`date +%s-hamwave`
 
