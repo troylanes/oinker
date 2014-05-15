@@ -47,7 +47,6 @@ while time.time() < sample_until: #sample for 15 seconds
     if val != 0x7FFF:
       print "I HEARD SOMETHING!"
       sys.exit(-1)
-
-    time.sleep(0.1)
+    time.sleep(0.001)
 
 print "SWEET SILENCE"
