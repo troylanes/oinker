@@ -15,8 +15,6 @@ import audioop
 import sys
 
 
-SAMPLE_FOR_SILENCE_SECONDS = 15
-
 # Open the device in nonblocking capture mode. The last argument could
 # just as well have been zero for blocking mode. Then we could have
 # left out the sleep call in the bottom of the loop
@@ -36,18 +34,19 @@ inp.setformat(alsaaudio.PCM_FORMAT_S16_LE)
 # mode.
 inp.setperiodsize(160)
 
-sample_until = time.time() + SAMPLE_FOR_SILENCE_SECONDS
 
-while time.time() < sample_until: #sample for 15 seconds
+while True: #time.time() < sample_until: #sample for 15 seconds
   # Read data from device
-  l,data = inp.read()
-  if l:
-    # Return the maximum of the absolute value of all samples in a fragment.
-    val = audioop.max(data, 2)
-    if val > 500:
-      print "I HEARD SOMETHING! %d" % val
-      sys.exit(-1)
-    time.sleep(0.001)
+  try:
+    l,data = inp.read()
+    if l:
+      # Return the maximum of the absolute value of all samples in a fragment.
+      try:
+        val = audioop.max(data, 2)
+        print "%f,%d" % (time.time(), val)
+      except:
+        None #nothing to see here
+  except:
+    None
+  time.sleep(0.001)
 
-print "SWEET SILENCE"
-sys.exit(0)
